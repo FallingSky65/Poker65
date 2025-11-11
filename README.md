@@ -1,5 +1,11 @@
 # Poker65
-Python library for working with poker hands
+Python library for working with poker hands.
+
+Functionality includes:
+- creating card objects
+- creating hand objects
+- comparing poker hands
+- getting the best poker hand from a list of 7 cards
 
 ## Example
 
@@ -23,3 +29,5 @@ print(get_best_hand(hand + community_cards))
 # Straight(♣J, ♣T, ♡9, ♢8, ♡7) 
 print(repr(get_best_hand(hand + community_cards)))
 ```
+
+## documentation WIP
