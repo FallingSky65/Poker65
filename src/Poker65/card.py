@@ -73,3 +73,8 @@ class Card():
 
     def __hash__(self) -> int:
         return self.suit * 13 + self.rank
+
+    def __eq__(self, value: object, /) -> bool:
+        if isinstance(value, Card):
+            return self.__hash__() == value.__hash__()
+        return False

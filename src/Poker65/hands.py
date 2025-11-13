@@ -150,10 +150,12 @@ class FullHouse(Hand):
     def __init__(self, trip_rank : intstr, trip_missing_suit : intstr, pair_rank : intstr,
                  pair_suits : tuple[intstr, intstr]) -> None:
         super().__init__('FullHouse', 6)
+        assert self.trip_rank != self.pair_rank
         self.trip_rank : int = Card.rank2int(trip_rank)
         self.trip_missing_suit : int = Card.suit2int(trip_missing_suit)
         self.pair_rank : int = Card.rank2int(pair_rank)
         self.pair_suits : list[int] = [Card.suit2int(pair_suits[0]), Card.suit2int(pair_suits[1])]
+        assert self.pair_suits[0] != self.pair_suits[1]
         self.pair_suits.sort()
 
     def get_cards(self) -> list[Card]:
@@ -186,6 +188,7 @@ class Flush(Hand):
         assert len(ranks) == 5
         self.suit : int = Card.suit2int(suit)
         self.ranks : list[int] = [Card.rank2int(rank) for rank in ranks]
+        assert len(set(self.ranks)) == 5
         self.ranks.sort(reverse=True)
 
     def get_cards(self) -> list[Card]:
@@ -239,6 +242,9 @@ class ThreeOfAKind(Hand):
     #   two kickers
     def __init__(self, trip_rank : intstr, trip_missing_suit : intstr, kicker1 : Card, kicker2 : Card) -> None:
         super().__init__('ThreeOfAKind', 3)
+        assert kicker1.rank != trip_rank
+        assert kicker2.rank != trip_rank
+        assert kicker1 != kicker2
         self.trip_rank : int = Card.rank2int(trip_rank)
         self.trip_missing_suit : int = Card.suit2int(trip_missing_suit)
         self.kickers : list[Card] = [kicker1, kicker2]
@@ -279,6 +285,8 @@ class TwoPair(Hand):
         r1 : int = Card.rank2int(pair1_rank)
         r2 : int = Card.rank2int(pair2_rank)
         assert r1 != r2
+        assert r1 != kicker.rank
+        assert r2 != kicker.rank
         if r1 > r2:
             self.high_pair_rank : int = r1
             self.high_pair_suits : list[int] = [Card.suit2int(s) for s in pair1_suits]
@@ -294,6 +302,8 @@ class TwoPair(Hand):
             self.low_pair_suits : list[int] = [Card.suit2int(s) for s in pair1_suits]
             self.low_pair_suits.sort()
         self.kicker = kicker
+        assert self.high_pair_suits[0] != self.high_pair_suits[1]
+        assert self.low_pair_suits[0] != self.low_pair_suits[1]
 
     def get_cards(self) -> list[Card]:
         return [
@@ -325,7 +335,12 @@ class OnePair(Hand):
         super().__init__('OnePair', 1)
         assert len(kickers) == 3
         self.pair_rank : int = Card.rank2int(pair_rank)
+        assert self.pair_rank != kickers[0].rank
+        assert self.pair_rank != kickers[1].rank
+        assert self.pair_rank != kickers[2].rank
+        assert kickers[0] != kickers[1] and kickers[0] != kickers[2] and kickers[1] != kickers[2]
         self.pair_suits : list[int] = [Card.suit2int(s) for s in pair_suits]
+        assert self.pair_suits[0] != self.pair_suits[1]
         self.pair_suits.sort()
         self.kickers : list[Card] = kickers.copy()
         self.kickers.sort(key=lambda c: c.rank, reverse=True)
@@ -361,6 +376,7 @@ class HighCard(Hand):
     def __init__(self, cards : list[Card]) -> None:
         super().__init__('HighCard', 0)
         assert len(cards) == 5
+        assert len(set([c.rank for c in cards])) == 5
         self.cards : list[Card] = cards.copy()
         self.cards.sort(key=lambda c: c.rank, reverse=True)
 
