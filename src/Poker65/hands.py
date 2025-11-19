@@ -150,10 +150,10 @@ class FullHouse(Hand):
     def __init__(self, trip_rank : intstr, trip_missing_suit : intstr, pair_rank : intstr,
                  pair_suits : tuple[intstr, intstr]) -> None:
         super().__init__('FullHouse', 6)
-        assert self.trip_rank != self.pair_rank
         self.trip_rank : int = Card.rank2int(trip_rank)
         self.trip_missing_suit : int = Card.suit2int(trip_missing_suit)
         self.pair_rank : int = Card.rank2int(pair_rank)
+        assert self.trip_rank != self.pair_rank
         self.pair_suits : list[int] = [Card.suit2int(pair_suits[0]), Card.suit2int(pair_suits[1])]
         assert self.pair_suits[0] != self.pair_suits[1]
         self.pair_suits.sort()
