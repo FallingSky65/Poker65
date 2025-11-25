@@ -492,7 +492,7 @@ def get_best_hand(cardlist : list[Card]) -> Hand:
     
     # check for flush
     if flush_suit is not None:
-        ranks : list[int] = sorted([c.rank for c in cardlist if c.suit == flush_suit])[:5]
+        ranks : list[int] = sorted([c.rank for c in cardlist if c.suit == flush_suit], reverse=True)[:5]
         return Flush(suit=flush_suit, ranks=ranks)
 
     # check for straight
